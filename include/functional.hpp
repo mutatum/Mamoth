@@ -23,4 +23,4 @@ private:
     FunctionalType objectiveFunction;
 };
 
-#endif // Functional.cpp
+#endif // FUNCTIONAL_CPP
