@@ -2,21 +2,24 @@
 #include <functional>
 #include <vector>
 
+enum class DiffMethod
+{
+    Forward,
+    Backward,
+    Central
+};
+
 class Functional
 {
 public:
-    // A functional taking a vector of variables and returning a double (the cost or objective value)
-    using FunctionalType = std::function<double(const std::vector<double> &)>;
+    Functional(std::function<double(const std::vector<double>&)> func);
 
-    // Constructor accepts any callable that matches the signature
-    Functional(FunctionalType func) : objectiveFunction(func) {}
-
-    // Evaluate the functional for a given set of variables
-    double evaluate(const std::vector<double> &variables) const
-    {
-        return objectiveFunction(variables);
-    }
+    std::vector<double> differentiate(const std::vector<double> &x, DiffMethod method, double h) const;
 
 private:
-    FunctionalType objectiveFunction;
+    std::function<double(const std::vector<double> &)> func_;
+    double differentiate_single(const std::vector<double> &x, std::size_t i, DiffMethod method, double h) const;
+    double forward_difference(const std::vector<double> &x, const std::vector<double> &x_plus_h, double h) const;
+    double backward_difference(const std::vector<double> &x, const std::vector<double> &x_minus_h, double h) const;
+    double central_difference(const std::vector<double> &x_plus_h, const std::vector<double> &x_minus_h, double h) const;
 };
